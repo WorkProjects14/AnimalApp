@@ -1,0 +1,64 @@
+/* ── Generate Page ──────────────────────────────────────────── */
+.generate-header {
+  padding: 6px 0 0;
+}
+
+.generate-header h1 {
+  max-width: 520px;
+  margin: 8px auto 0;
+  font-size: clamp(1.7rem, 4vw, 2.35rem);
+  text-align: center;
+}
+
+.generate-header p {
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.generate-header .mantine-Badge-root {
+  margin: 0 auto;
+}
+
+.generate-form,
+.generate-result-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-color: var(--border-glass-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.generate-result-card {
+  overflow: hidden;
+}
+
+.generate-result-img-wrapper {
+  position: relative;
+  aspect-ratio: 16 / 11;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.generate-result-badge {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  z-index: 2;
+}
+
+.generate-description-panel {
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass-strong);
+}
+
+.generate-result-actions {
+  align-items: stretch;
+}
+
+@media (max-width: 520px) {
+  .generate-result-actions {
+    flex-direction: column;
+  }
+}

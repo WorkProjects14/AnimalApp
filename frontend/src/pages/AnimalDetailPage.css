@@ -1,0 +1,219 @@
+/* ── Animal Detail Page ─────────────────────────────────────── */
+.detail-page {
+  min-height: 100dvh;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.detail-card {
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  background: var(--bg-card);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-color: var(--border-glass-strong);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Hero */
+.detail-hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.detail-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.detail-hero-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: linear-gradient(to top, var(--bg-primary) 5%, transparent 100%);
+  pointer-events: none;
+}
+
+.detail-back-btn {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-glass-strong);
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
+  z-index: 10;
+}
+
+.detail-back-btn:hover {
+  background: var(--bg-glass-hover);
+  border-color: var(--accent-primary);
+}
+
+/* Info Section */
+.detail-info {
+  padding: 0 20px 30px;
+  margin-top: -30px;
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detail-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-divider {
+  height: 1px;
+  background: var(--border-glass);
+  margin: 4px 0;
+}
+
+.detail-identity {
+  padding-bottom: 8px;
+}
+
+.detail-identity-header {
+  margin-bottom: 8px;
+}
+
+.detail-name {
+  font-size: 2rem;
+  font-family: var(--font-display);
+  margin-top: 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.detail-section-title {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 12px;
+}
+
+.detail-description-heading .detail-section-title {
+  margin-bottom: 0;
+}
+
+/* Audio Card */
+.audio-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass-strong);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.audio-card:hover {
+  background: var(--bg-glass-hover);
+  border-color: var(--accent-primary-dim);
+}
+
+.audio-card-text {
+  flex: 1;
+}
+
+.audio-title {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.audio-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.audio-wave-anim {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 20px;
+}
+
+.audio-wave-anim .wave {
+  display: block;
+  width: 4px;
+  background: var(--accent-primary);
+  border-radius: 2px;
+  animation: waveAnim 1s ease-in-out infinite;
+}
+
+.audio-wave-anim .wave:nth-child(1) { height: 10px; animation-delay: 0s; }
+.audio-wave-anim .wave:nth-child(2) { height: 20px; animation-delay: 0.2s; }
+.audio-wave-anim .wave:nth-child(3) { height: 12px; animation-delay: 0.4s; }
+
+@keyframes waveAnim {
+  0%, 100% { transform: scaleY(0.5); }
+  50% { transform: scaleY(1); }
+}
+
+.detail-audio-btn {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  background: var(--accent-primary-dim);
+  border: 1px solid var(--accent-primary);
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
+}
+
+.detail-audio-btn--playing {
+  background: var(--accent-primary);
+  box-shadow: 0 0 20px var(--accent-primary-glow);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.detail-audio-btn:hover {
+  transform: scale(1.08);
+}
+
+/* Description */
+.description-card {
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass-strong);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.description-card p,
+.description-card .mantine-Text-root {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin: 0;
+}

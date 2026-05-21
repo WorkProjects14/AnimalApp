@@ -1,0 +1,42 @@
+
+# 🔐 Environment variables
+.env
+.env.*
+
+# 🐍 Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 📦 Virtual environments (VERY IMPORTANT
+env/
+
+
+# 📄 Logs
+*.log
+
+firebase_service_key.json# 🧪 Testing / coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# 🏗 Build / dist
+build/
+dist/
+*.egg-info/
+
+# ⚙️ IDE / Editor files
+.vscode/
+.idea/
+
+# 🗂 OS files
+.DS_Store
+Thumbs.db
+
+# 🔑 Python version
+.python-version
+
+node_modules/
+firebase_service_key.json
+firebase_service_key.json
+init_db.py

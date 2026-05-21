@@ -1,0 +1,73 @@
+/* ── Profile Page ───────────────────────────────────────────── */
+.profile-header {
+  text-align: center;
+  padding: 24px 0 8px;
+}
+
+.profile-avatar {
+  font-size: 4rem;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 4px 20px rgba(0, 230, 118, 0.3));
+}
+
+.profile-header h1 {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+.profile-header p {
+  font-size: 0.85rem;
+}
+
+/* Cards */
+.profile-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+}
+
+.profile-card-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-card-content h3 {
+  font-size: 0.9rem;
+  margin-bottom: 2px;
+}
+
+.profile-card-content p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Footer */
+.profile-footer {
+  text-align: center;
+  padding: 32px 0 16px;
+}
+
+.profile-footer p {
+  font-size: 0.8rem;
+}
+
+.profile-copyright {
+  margin-top: 4px;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
