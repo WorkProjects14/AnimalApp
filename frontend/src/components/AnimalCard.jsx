@@ -2,7 +2,6 @@ import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ActionIcon, Badge, Card, Group, Image, Stack, Text, Tooltip } from '@mantine/core';
 import { IconBook2, IconPlayerPauseFilled, IconVolume2 } from '@tabler/icons-react';
-import { staticUrl } from '../api/api';
 import './AnimalCard.css';
 
 export default function AnimalCard({ animal, index = 0 }) {
