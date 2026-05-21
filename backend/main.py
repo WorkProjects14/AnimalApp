@@ -29,10 +29,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://animal-app-68rf.vercel.app"
-        
-    ],  # Adjust or extend in production
-    allow_origin_regex="https://.*\\.vercel\\.app",
+        "https://animal-app-68rf.vercel.app",
+    ],
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
