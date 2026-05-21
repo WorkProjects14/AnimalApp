@@ -18,4 +18,3 @@ elevenlabs
 slowapi
 pydantic
 asyncpg
-psycopg2
