@@ -90,7 +90,7 @@ export default function AnimalCard({ animal, index = 0 }) {
       {animal.desc_audio_url && (
         <audio
           ref={audioRef}
-          src={staticUrl(animal.desc_audio_url)}
+          src={animal.desc_audio_url}
           onEnded={() => setIsPlaying(false)}
           preload="metadata"
         />

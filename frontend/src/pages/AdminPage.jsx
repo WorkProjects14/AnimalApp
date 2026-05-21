@@ -49,7 +49,6 @@ import {
   generateAiAnimal,
   rejectAnimal,
   saveAiAnimalToMain,
-  staticUrl,
   updateAnimal,
 } from '../api/api';
 import './AdminPage.css';
@@ -431,7 +430,7 @@ export default function AdminPage() {
                   {aiResult && (
                     <Card withBorder radius="md" p="md" className="admin-ai-result">
                       <Group align="stretch" gap="md">
-                        <Image src={staticUrl(aiResult.image_url)} alt={aiResult.name} className="admin-ai-result-img" />
+                        <Image src={aiResult.image_url} alt={aiResult.name} className="admin-ai-result-img" />
                         <Stack gap={8} flex={1}>
                           <Group justify="space-between" align="flex-start">
                             <div>
@@ -477,10 +476,10 @@ export default function AdminPage() {
                             </Button>
                           </Group>
                           {aiResult.audio_url && (
-                            <audio ref={audioRef} src={staticUrl(aiResult.audio_url)} preload="metadata" />
+                            <audio ref={audioRef} src={aiResult.audio_url} preload="metadata" />
                           )}
                           {aiResult.desc_audio_url && (
-                            <audio ref={descAudioRef} src={staticUrl(aiResult.desc_audio_url)} preload="metadata" />
+                            <audio ref={descAudioRef} src={aiResult.desc_audio_url} preload="metadata" />
                           )}
                         </Stack>
                       </Group>
@@ -508,7 +507,7 @@ export default function AdminPage() {
                   {animals.map((animal) => (
                     <Card key={animal.id} withBorder radius="lg" shadow="sm" p="md" className="admin-animal-item">
                       <Group align="flex-start" wrap="nowrap">
-                        <Image src={staticUrl(animal.image_url)} alt={animal.name} className="admin-animal-thumb" />
+                        <Image src={animal.image_url} alt={animal.name} className="admin-animal-thumb" />
                         <Stack gap={6} flex={1}>
                           <Group justify="space-between" align="flex-start" gap="xs">
                             <div>
@@ -551,7 +550,7 @@ export default function AdminPage() {
                 {requests.map((request) => (
                   <Card key={request.id} withBorder radius="lg" shadow="sm" p="md" className="admin-request-item">
                     <Group align="stretch" gap="md">
-                      <Image src={staticUrl(request.image_url)} alt={request.name} className="admin-request-img" />
+                      <Image src={request.image_url} alt={request.name} className="admin-request-img" />
                       <Stack gap={8} flex={1}>
                         <Group justify="space-between" align="flex-start">
                           <div>

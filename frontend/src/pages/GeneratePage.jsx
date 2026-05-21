@@ -36,7 +36,6 @@ import {
   editAiAnimal,
   generateAiAnimal,
   sendAnimalRequest,
-  staticUrl,
 } from '../api/api';
 import './GeneratePage.css';
 
@@ -265,7 +264,7 @@ export default function GeneratePage() {
             <Stack gap="lg">
               <Card.Section className="generate-result-img-wrapper">
                 <Image
-                  src={staticUrl(result.image_url)}
+                  src={result.image_url}
                   alt={result.name}
                   h="100%"
                   fit="cover"
@@ -335,7 +334,7 @@ export default function GeneratePage() {
               {result.audio_url && (
                 <audio
                   ref={audioRef}
-                  src={staticUrl(result.audio_url)}
+                  src={result.audio_url}
                   onEnded={() => setAudioPlaying(false)}
                   preload="metadata"
                 />
@@ -343,7 +342,7 @@ export default function GeneratePage() {
               {result.desc_audio_url && (
                 <audio
                   ref={descAudioRef}
-                  src={staticUrl(result.desc_audio_url)}
+                  src={result.desc_audio_url}
                   onEnded={() => setDescPlaying(false)}
                   preload="metadata"
                 />

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ActionIcon, Group, Text, Tooltip } from '@mantine/core';
 import { IconPlayerPauseFilled, IconVolume2 } from '@tabler/icons-react';
-import { fetchAnimal, staticUrl } from '../api/api';
+import { fetchAnimal} from '../api/api';
 import './AnimalDetailPage.css';
 
 export default function AnimalDetailPage() {
@@ -87,7 +87,7 @@ export default function AnimalDetailPage() {
         {/* Hero Image */}
         <div className="detail-hero animate-fade-in">
           <img
-            src={staticUrl(animal.image_url)}
+            src={animal.image_url}
             alt={animal.name}
             className="detail-hero-img"
           />
@@ -171,7 +171,7 @@ export default function AnimalDetailPage() {
           {animal.audio_url && (
             <audio
               ref={audioRef}
-              src={staticUrl(animal.audio_url)}
+              src={animal.audio_url}
               onEnded={() => setIsPlaying(false)}
               preload="metadata"
             />
@@ -180,7 +180,7 @@ export default function AnimalDetailPage() {
           {animal.desc_audio_url && (
             <audio
               ref={descAudioRef}
-              src={staticUrl(animal.desc_audio_url)}
+              src={animal.desc_audio_url}
               onEnded={() => setIsDescPlaying(false)}
               preload="metadata"
             />
