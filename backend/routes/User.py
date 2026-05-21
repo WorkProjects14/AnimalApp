@@ -5,9 +5,9 @@ from typing import Optional
 from fastapi import Depends,APIRouter,File, Form,UploadFile,HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession 
 from sqlalchemy import select
-import backend.models
-from backend.database import get_db
-import backend.schemas
+import models
+from database import get_db
+import schemas
 import shutil
 
 from dotenv import load_dotenv
@@ -25,10 +25,10 @@ load_dotenv()
 router = APIRouter(prefix='/user',tags=['user'])
 
 #  fetch all animals from database
-@router.get('/all_animals',response_model=list[backend.schemas.AllAnimalResponse])
+@router.get('/all_animals',response_model=list[schemas.AllAnimalResponse])
 async def all_animals(db:AsyncSession=Depends(get_db)):
     result = await  db.execute(
-         select(backend.models.Animal)
+         select(models.Animal)
     )
  
     animals = result.scalars().all()
@@ -38,10 +38,10 @@ async def all_animals(db:AsyncSession=Depends(get_db)):
 
 
 # get with specise option  ( name , image, id)
-@router.get('/animals_by_species/{species}',response_model=list[backend.schemas.AllAnimalResponse])
+@router.get('/animals_by_species/{species}',response_model=list[schemas.AllAnimalResponse])
 async def animals_by_species(species:str,db:AsyncSession=Depends(get_db)):
         result = await db.execute(
-             select(backend.models.Animal).where(backend.models.Animal.species==species)
+             select(models.Animal).where(models.Animal.species==species)
         )
         animal = result.scalars().all()
         return animal
@@ -51,10 +51,10 @@ async def animals_by_species(species:str,db:AsyncSession=Depends(get_db)):
        
 
 # get the specific animal from the database when long pressed on the animal card in the frontend
-@router.get('/animal/{id}',response_model=backend.schemas.AllAnimalResponse)
+@router.get('/animal/{id}',response_model=schemas.AllAnimalResponse)
 async def get_animal(id:int, db:AsyncSession=Depends(get_db)):
     result = await db.execute(
-         select(backend.models.Animal).where(backend.models.Animal.id == id)
+         select(models.Animal).where(models.Animal.id == id)
     )
     animal = result.scalars().first()
     return animal
@@ -62,21 +62,21 @@ async def get_animal(id:int, db:AsyncSession=Depends(get_db)):
 
 
 # for the single click
-@router.get('/animal_audio/{id}',response_model=backend.schemas.AudioResponse)
+@router.get('/animal_audio/{id}',response_model=schemas.AudioResponse)
 async def get_Animal_Audio(id:int,db:AsyncSession=Depends(get_db)):
      result = await db.execute(
-          select(backend.models.Animal).where(backend.models.Animal.id==id)
+          select(models.Animal).where(models.Animal.id==id)
      )
      animal_audio = result.scalars().first()
      return animal_audio
 
 
 # send request to admin
-@router.post('/animal/send_request/{animal_id}',response_model=backend.schemas.AnimalRequestResponse)
+@router.post('/animal/send_request/{animal_id}',response_model=schemas.AnimalRequestResponse)
 async def animal_request(animal_id:int,db:AsyncSession=Depends(get_db)):
 
     result = await db.execute(
-        select(backend.models.AigeneratedAnimal).where(backend.models.AigeneratedAnimal.id == animal_id)
+        select(models.AigeneratedAnimal).where(models.AigeneratedAnimal.id == animal_id)
     )
 
     # print('result',result)
@@ -91,7 +91,7 @@ async def animal_request(animal_id:int,db:AsyncSession=Depends(get_db)):
     
 
     # add request to request databse
-    new_request = backend.models.AnimalRequests(
+    new_request = models.AnimalRequests(
         name = animal.name,
         species = animal.species,
         description = animal.description,
@@ -117,7 +117,7 @@ async def animal_request(animal_id:int,db:AsyncSession=Depends(get_db)):
 async def cancel_animal_request(animal_id:int,db:AsyncSession=Depends(get_db)):
 
     result = await db.execute(
-        select(backend.models.AigeneratedAnimal).where(backend.models.AigeneratedAnimal.id==animal_id)
+        select(models.AigeneratedAnimal).where(models.AigeneratedAnimal.id==animal_id)
     )
 
     animal = result.scalars().first()
@@ -161,7 +161,7 @@ async def generate_ai_animal(name:str,style: str,audio_file: UploadFile = File(.
 
     # --------------------checking in the db ----------------------------------
     result = await db.execute(
-        select(backend.models.Animal).where(backend.models.Animal.name==name)
+        select(models.Animal).where(models.Animal.name==name)
     )
 
     existing_animal = result.scalars().first()
@@ -346,7 +346,7 @@ async def generate_ai_animal(name:str,style: str,audio_file: UploadFile = File(.
 
     
     # save to the datbase
-    ai_generated_animal = backend.models.AigeneratedAnimal(
+    ai_generated_animal = models.AigeneratedAnimal(
         name=desc['name'].capitalize(),
         species=desc['type'].capitalize(),
         description=desc['description'],
@@ -380,8 +380,8 @@ async def edit_ai_animal(
     ):
     # Check animal exists
     result = await db.execute(
-        select(backend.models.AigeneratedAnimal).where(
-            backend.models.AigeneratedAnimal.id == animal_id
+        select(models.AigeneratedAnimal).where(
+            models.AigeneratedAnimal.id == animal_id
         )
     )
 

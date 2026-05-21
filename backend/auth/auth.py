@@ -1,7 +1,7 @@
 from fastapi import Depends,HTTPException
 from fastapi.security import HTTPBearer,HTTPAuthorizationCredentials
 from firebase_admin import auth
-from backend.auth.firebase_config import firebase_app
+from auth.firebase_config import firebase_app
 
 
 

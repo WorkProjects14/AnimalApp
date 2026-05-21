@@ -1,13 +1,13 @@
 from fastapi import FastAPI, Depends
-import backend.routes.Admin
-import backend.routes.User
+import routes.Admin
+import routes.User
 from fastapi.staticfiles import StaticFiles
 import os
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import asyncio
-from backend.auth.auth import verify_admin
-from backend.core.limiter import limiter
+from auth.auth import verify_admin
+from core.limiter import limiter
 from slowapi.middleware import SlowAPIMiddleware
 
 # Initialize FastAPI App
@@ -37,9 +37,9 @@ if os.path.exists(STATIC_DIR):
 
 
 # Include Routers
-app.include_router(backend.routes.Admin.router)
-app.include_router(backend.routes.Admin.admin_login_router)
-app.include_router(backend.routes.User.router)
+app.include_router(routes.Admin.router)
+app.include_router(routes.Admin.admin_login_router)
+app.include_router(routes.User.router)
 
 @app.get('/api')
 def home():
