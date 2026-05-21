@@ -11,20 +11,25 @@ from core.limiter import limiter
 from slowapi.middleware import SlowAPIMiddleware
 from database import init_db
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    await init_db()
-    yield
+
+# run once to create the table in the database, then comment out the lifespan function and use the normal FastAPI app initialization to avoid re-creating tables on every startup
+
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     await init_db()
+#     yield
 
 
-app = FastAPI(lifespan=lifespan)
+# app = FastAPI(lifespan=lifespan)
+
+app = FastAPI()
 
 # Add CORS middleware to allow the frontend to communicate with the backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://animal-app-68rf.vercel.app/"
+        "https://animal-app-68rf.vercel.app"
         
     ],  # Adjust or extend in production
     allow_origin_regex="https://.*\\.vercel\\.app",
