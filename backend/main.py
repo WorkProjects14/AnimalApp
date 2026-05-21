@@ -9,15 +9,22 @@ import asyncio
 from auth.auth import verify_admin
 from core.limiter import limiter
 from slowapi.middleware import SlowAPIMiddleware
+from database import init_db
 
-# Initialize FastAPI App
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await init_db()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 # Add CORS middleware to allow the frontend to communicate with the backend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
+        "https://animal-app-68rf.vercel.app/"
         
     ],  # Adjust or extend in production
     allow_origin_regex="https://.*\\.vercel\\.app",
@@ -44,6 +51,10 @@ app.include_router(routes.User.router)
 @app.get('/')
 def home():
     return 'app is running successfully'
+
+
+
+
 
 
 # rate limiter
