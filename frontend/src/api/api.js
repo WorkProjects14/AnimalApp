@@ -43,12 +43,7 @@ async function request(endpoint, options = {}, token = null) {
   return response.json();
 }
 
-/** Build a full static URL */
-export function staticUrl(path) {
-  if (!path) return '';
-  if (path.startsWith('http')) return path;
-  return `${API_BASE}/${path}`;
-}
+
 
 // ========================
 // User Endpoints (public)

@@ -46,7 +46,7 @@ export default function AnimalCard({ animal, index = 0 }) {
     >
       <Card.Section className="animal-card-img-wrapper">
         <Image
-          src={staticUrl(animal.image_url)}
+          src={animal.image_url}
           alt={animal.name}
           h="100%"
           fit="cover"

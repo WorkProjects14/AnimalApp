@@ -2,7 +2,8 @@ import os
 from typing import Optional
 
 from gtts import gTTS
-
+from io import BytesIO
+from storage import upload_image,upload_audio,upload_desc_audio,delete_file
 import models
 import schemas
 import shutil
@@ -79,25 +80,35 @@ async def add_animal(name:str,
     if not audio.content_type.startswith('audio/'):
         raise HTTPException(status_code=400, detail="Invalid audio file type. Please upload an audio file.")
 
-    # generate unique file name
+
     
 
-    # genearate the path to add in db 
-    image_file_path = f"static/images/{image.filename}"
-    audio_file_path = f'static/audio/{audio.filename}'
-    desc_audio_file_path = f'static/desc_audio/{name}.wav'
+    # save files to supabase storage and get the public url
+    image_bytes = await image.read()
+    image_file_path = upload_image(
+        file_bytes=image_bytes,
+        filename=f"{name}.png",
+    )
 
-    # save image to local image folder
-    with open(image_file_path,'wb') as buffer:
-        shutil.copyfileobj(image.file,buffer)
+    audio_bytes = await audio.read()
+    audio_file_path = upload_audio( 
+        file_bytes=audio_bytes,
+        filename=f"{name}.mp3",
+    )
 
-    # save audio to local audio folder
-    with open(audio_file_path,'wb') as buffer:
-        shutil.copyfileobj(audio.file,buffer)
+
     
     # desc audio sound
     tts = gTTS(description, lang='en')
-    tts.save(desc_audio_file_path)
+    audio_buffer = BytesIO()
+    tts.write_to_fp(audio_buffer)
+
+    audio_buffer.seek(0)
+    desc_audio_file_path = upload_desc_audio(
+        file_bytes=audio_buffer.read(),
+        filename=f"{name}.mp3",
+        
+    )
 
     # save to db
     new_animal = models.Animal(name=name.capitalize(),
@@ -205,14 +216,9 @@ async def delete_animal(animal_id:int,db:AsyncSession=Depends(get_db)):
     if not animal:
         raise HTTPException(status_code=404,detail="animal not found")
 
-    if os.path.exists(animal.desc_audio_url):
-        os.remove(animal.desc_audio_url)
-
-    if os.path.exists(animal.audio_url):
-        os.remove(animal.audio_url)
-
-    if os.path.exists(animal.image_url):
-        os.remove(animal.image_url)
+    delete_file("animal-image", animal.image_url)
+    delete_file("animal-audio", animal.audio_url)
+    delete_file("desc-audio", animal.desc_audio_url)
         
 
     await db.delete(animal)
@@ -289,14 +295,9 @@ async def reject_animal(request_id:int,db:AsyncSession=Depends(get_db)):
     if not animal:
         raise HTTPException(status_code=404,detail="Request not found")
 
-    if os.path.exists(animal.desc_audio_url):
-        os.remove(animal.desc_audio_url)
-
-    # if os.path.exists(animal.audio_url):
-    #     os.remove(animal.audio_url)
-
-    if os.path.exists(animal.image_url):
-        os.remove(animal.image_url)
+    delete_file("animal-image", animal.image_url)
+    delete_file("animal-audio", animal.audio_url)
+    delete_file("desc-audio", animal.desc_audio_url)
     
     await db.delete(animal)  # delete the animal from the db 
     await db.commit()
@@ -487,20 +488,34 @@ async def generate_ai_animal(name:str,style: str,audio_file: UploadFile = File(.
 
 
 
-    # Save image
-    with open(f"static/images/{name}.png", "wb") as f:
-        f.write(img_response.content)
+    supabase_image_url = upload_image(
+    img_response.content,
+    f"{name}.png"
+)
 
-    # manual audio save 
-    with open(f"static/audio/{name}.mp3", "wb") as buffer:
-        shutil.copyfileobj(audio_file.file, buffer)
+    audio_bytes = await audio_file.read()
+
+    supabase_audio_url = upload_audio(
+        audio_bytes,
+        f"{name}.mp3"
+    )
 
 
 
     # generate the description audio using gtts
-    tts = gTTS(desc['description'], lang='en')
-    audio_filename = f"static/desc_audio/{name}.wav"
-    tts.save(audio_filename)
+
+    tts = gTTS(text=desc['description'], lang='en')
+
+    audio_buffer = BytesIO()
+    tts.write_to_fp(audio_buffer)
+
+    audio_buffer.seek(0)
+
+    supabase_desc_audio_url = upload_desc_audio(
+        file_bytes=audio_buffer.read(),
+        filename=f"{name}.mp3",
+        
+    )
 
     
     # save to the datbase
@@ -508,9 +523,9 @@ async def generate_ai_animal(name:str,style: str,audio_file: UploadFile = File(.
         name=desc['name'].capitalize(),
         species=desc['type'].capitalize(),
         description=desc['description'],
-        desc_audio_url=audio_filename,
-        image_url=f"static/images/{name}.png",
-        audio_url=f"static/audio/{name}.mp3"
+        desc_audio_url=supabase_desc_audio_url,
+        image_url=supabase_image_url,
+        audio_url=supabase_audio_url
     )
 
     db.add(ai_generated_animal)
@@ -558,37 +573,58 @@ async def edit_ai_animal(
     if description and description.strip():
         animal.description = description.strip()
 
-    # Create directories if not exist
-    os.makedirs("static/images", exist_ok=True)
-    os.makedirs("static/audio", exist_ok=True)
-    os.makedirs("static/desc_audio", exist_ok=True)
+    
 
     # Optional image upload
     if image_file and image_file.filename:
         
-        image_path = f"static/images/{name}.png"
+        if animal.image_url:
+            delete_file("animal-image", animal.image_url)
 
-        with open(image_path, "wb") as buffer:
-            shutil.copyfileobj(image_file.file, buffer)
 
-        animal.image_url = image_path
+        image_bytes = await image_file.read()
+
+        image_url = upload_image(
+            file_bytes=image_bytes,
+            filename=f"{animal.name}.png",
+        
+        )
+
+        animal.image_url = image_url
 
     # Optional audio upload
     if audio_file and audio_file.filename:
         
-        audio_path = f"static/audio/{name}.mp3"
+        if animal.audio_url:
+            delete_file("animal-audio", animal.audio_url)
 
-        with open(audio_path, "wb") as buffer:
-            shutil.copyfileobj(audio_file.file, buffer)
+        audio_bytes = await audio_file.read()
+        audio_path = upload_audio(
+            file_bytes=audio_bytes,
+            filename=f"{animal.name}.mp3",
+        )
 
         animal.audio_url = audio_path
 
     # Regenerate description audio only if description changed
     if description:
-        desc_audio_path = f"static/desc_audio/{name}.wav"
+        
+        if animal.desc_audio_url:
+            delete_file("desc-audio", animal.desc_audio_url)
+
+        
+
 
         tts = gTTS(description, lang='en')
-        tts.save(desc_audio_path)
+        audio_buffer = BytesIO()
+        tts.write_to_fp(audio_buffer)
+
+        audio_buffer.seek(0)
+
+        desc_audio_path = upload_desc_audio(
+            file_bytes=audio_buffer.read(),
+            filename=f"{animal.name}.wav",
+        )
 
         animal.desc_audio_url = desc_audio_path
 
