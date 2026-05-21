@@ -41,13 +41,10 @@ app.include_router(routes.Admin.router)
 app.include_router(routes.Admin.admin_login_router)
 app.include_router(routes.User.router)
 
-@app.get('/api')
+@app.get('/')
 def home():
     return 'app is running successfully'
 
-@app.get("/api/test")
-def test():
-    return {"status": "working"}
 
 # rate limiter
 app.state.limiter = limiter
